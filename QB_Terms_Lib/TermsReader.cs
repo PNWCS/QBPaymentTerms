@@ -3,14 +3,12 @@
 namespace QB_Terms_Lib
 {
     public class TermsReader
-    {
-        public static List<PaymentTerm> QueryAllTerms()
+    { public static List<PaymentTerm> QueryAllTerms()
         {
             bool sessionBegun = false;
             bool connectionOpen = false;
             QBSessionManager sessionManager = null;
             List<PaymentTerm> terms = new List<PaymentTerm>();
-
             try
             {
                 // Create the session Manager object
@@ -19,24 +17,19 @@ namespace QB_Terms_Lib
                 // Create the message set request object to hold our request
                 IMsgSetRequest requestMsgSet = sessionManager.CreateMsgSetRequest("US", 16, 0);
                 requestMsgSet.Attributes.OnError = ENRqOnError.roeContinue;
-
                 IStandardTermsQuery StandardTermsQueryRq = requestMsgSet.AppendStandardTermsQueryRq();
-
                 // Connect to QuickBooks and begin a session
                 sessionManager.OpenConnection("", "Sample Code from OSR");
                 connectionOpen = true;
                 sessionManager.BeginSession("", ENOpenMode.omDontCare);
                 sessionBegun = true;
-
                 // Send the request and get the response from QuickBooks
                 IMsgSetResponse responseMsgSet = sessionManager.DoRequests(requestMsgSet);
-
                 // End the session and close the connection to QuickBooks
                 sessionManager.EndSession();
                 sessionBegun = false;
                 sessionManager.CloseConnection();
                 connectionOpen = false;
-
                 terms = WalkStandardTermsQueryRs(responseMsgSet);
                 return terms;
             }
@@ -54,19 +47,16 @@ namespace QB_Terms_Lib
                 return terms;
             }
         }
-
         // void BuildStandardTermsQueryRq(IMsgSetRequest requestMsgSet)
         // {
         //     IStandardTermsQuery StandardTermsQueryRq = requestMsgSet.AppendStandardTermsQueryRq();
         // }
-
         static List<PaymentTerm> WalkStandardTermsQueryRs(IMsgSetResponse responseMsgSet)
         {
             List<PaymentTerm> terms = new List<PaymentTerm>();
             if (responseMsgSet == null) return terms;
             IResponseList responseList = responseMsgSet.ResponseList;
             if (responseList == null) return terms;
-
             // If we sent only one request, there is only one response, we'll walk the list for this sample
             for (int i = 0; i < responseList.Count; i++)
             {
@@ -90,7 +80,6 @@ namespace QB_Terms_Lib
             }
             return terms;
         }
-
         static List<PaymentTerm> WalkStandardTermsRet(IStandardTermsRetList StandardTermsRet)
         {
             List<PaymentTerm> terms = new List<PaymentTerm>();
