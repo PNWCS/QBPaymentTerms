@@ -1,9 +1,9 @@
 ﻿using QBFC16Lib;
+
 namespace QB_Terms_Lib
 {
     public class TermsReader
-    { 
-        public static List<PaymentTerm> QueryAllTerms()
+    {  public static List<PaymentTerm> QueryAllTerms()
         {
             bool sessionBegun = false;
             bool connectionOpen = false;
