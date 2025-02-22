@@ -95,7 +95,6 @@ namespace QB_Terms_Lib
         {
             List<PaymentTerm> terms = new List<PaymentTerm>();
             if (StandardTermsRet == null) return terms;
-
             // Go through all the elements of IStandardTermsRetList
             // Get value of ListID
             for (int i = 0; i < StandardTermsRet.Count; i++)
@@ -112,9 +111,7 @@ namespace QB_Terms_Lib
                 {
                     companyID = (int)term.StdDiscountDays.GetValue();
                 }
-
                 Console.WriteLine($"{name}, {qbID} , {qbRev}, {companyID}");
-
                 PaymentTerm paymentTerm = new PaymentTerm(qbID, qbRev, name, companyID);
                 terms.Add(paymentTerm);
             }
