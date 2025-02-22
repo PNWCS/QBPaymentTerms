@@ -118,7 +118,6 @@ namespace QB_Terms_Lib
                 PaymentTerm paymentTerm = new PaymentTerm(qbID, qbRev, name, companyID);
                 terms.Add(paymentTerm);
             }
-
             return terms;
         }
     }
