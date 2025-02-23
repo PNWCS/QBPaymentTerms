@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "QB_Demo_PaymentTerms_Lib/1.0.0": {
+        "runtime": {
+          "QB_Demo_PaymentTerms_Lib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "QB_Demo_PaymentTerms_Lib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

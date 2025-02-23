@@ -1,0 +1,13 @@
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\bin\Debug\net8.0\QB_Demo_PaymentTerms_Lib.deps.json
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\bin\Debug\net8.0\QB_Demo_PaymentTerms_Lib.dll
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\bin\Debug\net8.0\QB_Demo_PaymentTerms_Lib.pdb
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\Interop.QBFC16Lib.dll
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.csproj.ResolveComReference.cache
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.AssemblyInfoInputs.cache
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.AssemblyInfo.cs
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.csproj.CoreCompileInputs.cache
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.dll
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\refint\QB_Demo_PaymentTerms_Lib.dll
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\QB_Demo_PaymentTerms_Lib.pdb
+C:\Users\KumailM\source\repos\QBDemo_PaymentTerms\QB_Demo_PaymentTerms_Lib\obj\Debug\net8.0\ref\QB_Demo_PaymentTerms_Lib.dll
