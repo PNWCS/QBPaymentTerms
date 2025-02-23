@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QB_Terms_Lib
+﻿namespace QB_Terms_Lib
 {
     public class PaymentTerm
     {
@@ -19,6 +13,5 @@ namespace QB_Terms_Lib
             Name = name; 
             Company_ID = companyID;
         }
-
     }
 }
