@@ -1,5 +1,6 @@
 using System.Diagnostics;
-using QBFC16Lib; // Ensure this COM reference is added to your project
+using QBFC16Lib;
+using QB_Terms_Lib;
 
 namespace QB_Terms_Test
 {
@@ -20,7 +21,7 @@ namespace QB_Terms_Test
                     newTermListID = InsertSingleStandardTerm(qbSession, randomName, randomDays);
 
                     // 2) Query all terms using existing method
-                    var allTerms = QB_Terms_Lib.TermsReader.QueryAllTerms();
+                    var allTerms = TermsReader.QueryAllTerms();
                     Assert.NotNull(allTerms);
 
                     // 3) Verify the new term exists in QuickBooks
@@ -45,7 +46,7 @@ namespace QB_Terms_Test
             const int termCount = 100;
             var insertedTermListIDs = new List<string>();
             var insertedNames = new HashSet<string>();
-            const int MaxQueryTimeMilliseconds = 2000; // 2 seconds
+            const int MaxQueryTimeMilliseconds = 2000;
 
             using (var qbSession = new QuickBooksSession("Integration Test - Bulk Insert Standard Terms"))
             {
