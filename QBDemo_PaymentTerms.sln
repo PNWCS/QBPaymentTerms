@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QB_Demo_PaymentTerms_Lib", "QB_Demo_PaymentTerms_Lib\QB_Demo_PaymentTerms_Lib.csproj", "{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QB_Demo_PaymentTerms_CLI", "QB_Demo_PaymentTerms_CLI\QB_Demo_PaymentTerms_CLI.csproj", "{10288374-EF05-40FB-8B00-735EFB58DDB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QBDemo_PaymentTerms_Tests", "QBDemo_PaymentTerms_Tests\QBDemo_PaymentTerms_Tests.csproj", "{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB3657D0-A295-40A8-9177-2AF77AFCDA4F}.Release|x86.Build.0 = Release|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Debug|x86.Build.0 = Debug|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Release|x86.ActiveCfg = Release|Any CPU
+		{10288374-EF05-40FB-8B00-735EFB58DDB5}.Release|x86.Build.0 = Release|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Debug|x86.Build.0 = Debug|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Release|x86.ActiveCfg = Release|Any CPU
+		{A811DF0A-B579-4BAE-8CBC-7719A8EB6F11}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
