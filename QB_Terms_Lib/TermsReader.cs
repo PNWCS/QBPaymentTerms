@@ -1,4 +1,6 @@
 ﻿using QBFC16Lib;
+using System;
+using System.Collections.Generic;
 
 namespace QB_Terms_Lib
 {
@@ -55,11 +57,6 @@ namespace QB_Terms_Lib
             }
         }
 
-        // void BuildStandardTermsQueryRq(IMsgSetRequest requestMsgSet)
-        // {
-        //     IStandardTermsQuery StandardTermsQueryRq = requestMsgSet.AppendStandardTermsQueryRq();
-        // }
-
         static List<PaymentTerm> WalkStandardTermsQueryRs(IMsgSetResponse responseMsgSet)
         {
             List<PaymentTerm> terms = new List<PaymentTerm>();
@@ -67,21 +64,16 @@ namespace QB_Terms_Lib
             IResponseList responseList = responseMsgSet.ResponseList;
             if (responseList == null) return terms;
 
-            // If we sent only one request, there is only one response, we'll walk the list for this sample
             for (int i = 0; i < responseList.Count; i++)
             {
                 IResponse response = responseList.GetAt(i);
-                // Check the status code of the response, 0=ok, >0 is warning
                 if (response.StatusCode >= 0)
                 {
-                    // The request-specific response is in the details, make sure we have some
                     if (response.Detail != null)
                     {
-                        // Make sure the response is the type we're expecting
                         ENResponseType responseType = (ENResponseType)response.Type.GetValue();
                         if (responseType == ENResponseType.rtStandardTermsQueryRs)
                         {
-                            // Upcast to more specific type here, this is safe because we checked with response.Type check above
                             IStandardTermsRetList StandardTermsRet = (IStandardTermsRetList)response.Detail;
                             terms = WalkStandardTermsRet(StandardTermsRet);
                         }
@@ -96,24 +88,15 @@ namespace QB_Terms_Lib
             List<PaymentTerm> terms = new List<PaymentTerm>();
             if (StandardTermsRet == null) return terms;
 
-            // Go through all the elements of IStandardTermsRetList
-            // Get value of ListID
             for (int i = 0; i < StandardTermsRet.Count; i++)
             {
                 var term = StandardTermsRet.GetAt(i);
-                string qbID = (string)term.ListID.GetValue();
-                // Get value of EditSequence
-                string qbRev = (string)term.EditSequence.GetValue();
-                // Get value of Name
-                string name = (string)term.Name.GetValue();
-                int companyID = 0;
-                // Get value of StdDiscountDays
-                if (term.StdDiscountDays != null)
-                {
-                    companyID = (int)term.StdDiscountDays.GetValue();
-                }
+                string qbID = term.ListID.GetValue();
+                string qbRev = term.EditSequence.GetValue();
+                string name = term.Name.GetValue();
+                int companyID = term.StdDiscountDays != null ? term.StdDiscountDays.GetValue() : 0;
 
-                Console.WriteLine($"{name}, {qbID} , {qbRev}, {companyID}");
+                Console.WriteLine($"{name}, {qbID}, {qbRev}, {companyID}");
 
                 PaymentTerm paymentTerm = new PaymentTerm(qbID, qbRev, name, companyID);
                 terms.Add(paymentTerm);
