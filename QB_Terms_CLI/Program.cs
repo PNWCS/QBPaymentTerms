@@ -3,7 +3,7 @@ using QB_Terms_Lib;
 
 namespace qb_payment
 {
-    public class Sample
+    public class Program
     {
         public static void Main(string[] args)
         {
