@@ -1,14 +1,12 @@
-﻿using System.Data;
-using QB_Terms_Lib;
+﻿using QB_Terms_Lib;
 
-namespace qb_payment
+namespace QB_Term_CLI
 {
-    public class Sample
+    public class Program
     {
         public static void Main(string[] args)
         {
             TermsReader.QueryAllTerms();
         }
-
     }
 }
