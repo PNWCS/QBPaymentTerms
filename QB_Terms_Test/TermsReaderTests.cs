@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using QB_Terms_Lib;
 using QBFC16Lib; // Ensure this COM reference is added to your project
 
 namespace QB_Terms_Test
@@ -20,7 +21,7 @@ namespace QB_Terms_Test
                     newTermListID = InsertSingleStandardTerm(qbSession, randomName, randomDays);
 
                     // 2) Query all terms using existing method
-                    var allTerms = QB_Terms_Lib.TermsReader.QueryAllTerms();
+                    var allTerms = TermsReader.QueryAllTerms();
                     Assert.NotNull(allTerms);
 
                     // 3) Verify the new term exists in QuickBooks
@@ -64,7 +65,7 @@ namespace QB_Terms_Test
 
                     // 2) Measure Query Time
                     var stopwatch = Stopwatch.StartNew();
-                    var allTerms = QB_Terms_Lib.TermsReader.QueryAllTerms();
+                    List<PaymentTerm> allTerms = TermsReader.QueryAllTerms();
                     stopwatch.Stop();
 
 

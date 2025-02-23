@@ -9,6 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="QBFC16Lib">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>1d05360b-2536-4277-83fd-bdf639e20f9e</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QB_Terms_Lib\QB_Terms_Lib.csproj" />
   </ItemGroup>
 
