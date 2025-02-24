@@ -65,7 +65,7 @@ namespace QB_Terms_Test
 
                     // 2) Measure Query Time
                     var stopwatch = Stopwatch.StartNew();
-                    var allTerms =TermsReader.QueryAllTerms();
+                    var allTerms = TermsReader.QueryAllTerms();
                     stopwatch.Stop();
 
 
