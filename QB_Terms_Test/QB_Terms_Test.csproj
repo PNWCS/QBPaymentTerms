@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QB_Terms_CLI\QB_Terms_CLI.csproj" />
     <ProjectReference Include="..\QB_Terms_Lib\QB_Terms_Lib.csproj" />
   </ItemGroup>
 
