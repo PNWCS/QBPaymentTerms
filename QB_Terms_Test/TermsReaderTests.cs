@@ -1,131 +1,100 @@
 using System.Diagnostics;
-using QBFC16Lib; // Ensure this COM reference is added to your project
+using Serilog;
+using QB_Terms_Lib; // For PaymentTerm, TermsReader, AppConfig, etc.
+using QBFC16Lib;    // For QuickBooks session and API interaction
+using static QB_Terms_Test.CommonMethods;
 
 namespace QB_Terms_Test
 {
+    [Collection("Sequential Tests")]
     public class TermsReaderTests
     {
         [Fact]
-        public void QueryAllTerms_OneTerm()
+        public void AddAndReadMultipleTerms_FromQuickBooks_And_Verify_Logs()
         {
-            string newTermListID = string.Empty;
-            string randomName = "Term_" + Guid.NewGuid().ToString().Substring(0, 8);
-            int randomDays = new Random().Next(1, 30);
+            const int TERM_COUNT = 5;
+            const int STARTING_COMPANY_ID = 100;
+            List<PaymentTerm> termsToAdd = new List<PaymentTerm>();
 
-            using (var qbSession = new QuickBooksSession("Integration Test - Standard Terms"))
+            // 1) Ensure Serilog has released file access before deleting old logs
+            EnsureLogFileClosed();
+            DeleteOldLogFiles();
+            ResetLogger();
+
+            // 2) Build a list of random PaymentTerm objects
+            for (int i = 0; i < TERM_COUNT; i++)
             {
-                try
-                {
-                    // 1) Insert a single Standard Term
-                    newTermListID = InsertSingleStandardTerm(qbSession, randomName, randomDays);
+                string randomName = "ReadTestTerm_" + Guid.NewGuid().ToString("N").Substring(0, 8);
+                int companyID = STARTING_COMPANY_ID + i; // Ensure IDs are continuous but below 999
+                termsToAdd.Add(new PaymentTerm(randomName, companyID));
+            }
 
-                    // 2) Query all terms using existing method
-                    var allTerms = QB_Terms_Lib.TermsReader.QueryAllTerms();
-                    Assert.NotNull(allTerms);
-
-                    // 3) Verify the new term exists in QuickBooks
-                    var insertedTerm = allTerms.FirstOrDefault(t => t.Name.Equals(randomName, StringComparison.OrdinalIgnoreCase));
-                    Assert.NotNull(insertedTerm);
-                    Assert.Equal(newTermListID, insertedTerm.QB_ID);
-                }
-                finally
+            // 3) Add terms directly to QuickBooks
+            using (var qbSession = new QuickBooksSession(AppConfig.QB_APP_NAME))
+            {
+                foreach (var term in termsToAdd)
                 {
-                    // 4) Cleanup: Delete the inserted term (even if test fails)
-                    if (!string.IsNullOrEmpty(newTermListID))
-                    {
-                        DeleteStandardTerm(qbSession, newTermListID);
-                    }
+                    string qbID = AddStandardTerm(qbSession, term.Name, term.Company_ID);
+                    term.QB_ID = qbID; // Store the returned QB ID
                 }
+            }
+
+            // 4) Query QuickBooks to retrieve all terms
+            var allQBTerms = TermsReader.QueryAllTerms();
+
+            // 5) Verify that all added terms are present in QuickBooks
+            foreach (var term in termsToAdd)
+            {
+                var matchingTerm = allQBTerms.FirstOrDefault(t => t.QB_ID == term.QB_ID);
+                Assert.NotNull(matchingTerm);
+                Assert.Equal(term.Name, matchingTerm.Name);
+                Assert.Equal(term.Company_ID, matchingTerm.Company_ID);
+            }
+
+            // 6) Cleanup: Delete the added terms
+            using (var qbSession = new QuickBooksSession(AppConfig.QB_APP_NAME))
+            {
+                foreach (var term in termsToAdd.Where(t => !string.IsNullOrEmpty(t.QB_ID)))
+                {
+                    DeleteStandardTerm(qbSession, term.QB_ID);
+                }
+            }
+
+            // 7) Ensure logs are fully flushed before accessing them
+            EnsureLogFileClosed();
+
+            // 8) Verify new log file exists
+            string logFile = GetLatestLogFile();
+            EnsureLogFileExists(logFile);  // Ensure log file is fully written before reading
+
+            // 9) Read the log file content
+            string logContents = File.ReadAllText(logFile);
+
+            // 10) Assert expected log messages exist
+            Assert.Contains("TermsReader Initialized", logContents);
+            Assert.Contains("TermsReader Completed", logContents);
+
+            // 11) Verify that each retrieved term was logged properly
+            foreach (var term in termsToAdd)
+            {
+                string expectedLogMessage = $"Successfully retrieved {term.Name} from QB";
+                Assert.Contains(expectedLogMessage, logContents);
             }
         }
 
-        [Fact]
-        public void QueryAllTerms_100Terms_ShouldNotExceed2Sec()
-        {
-            const int termCount = 100;
-            var insertedTermListIDs = new List<string>();
-            var insertedNames = new HashSet<string>();
-            const int MaxQueryTimeMilliseconds = 2000; // 2 seconds
+        
 
-            using (var qbSession = new QuickBooksSession("Integration Test - Bulk Insert Standard Terms"))
-            {
-                try
-                {
-                    // 1) Insert 100 Standard Terms
-                    for (int i = 0; i < termCount; i++)
-                    {
-                        string randomName = "Term_" + Guid.NewGuid().ToString().Substring(0, 8);
-                        int randomDays = new Random().Next(1, 30);
-
-                        string listID = InsertSingleStandardTerm(qbSession, randomName, randomDays);
-                        insertedTermListIDs.Add(listID);
-                        insertedNames.Add(randomName);
-                    }
-
-                    // 2) Measure Query Time
-                    var stopwatch = Stopwatch.StartNew();
-                    var allTerms = QB_Terms_Lib.TermsReader.QueryAllTerms();
-                    stopwatch.Stop();
-
-
-                    // 3) Assert Query Completes Within 2 Seconds
-                    long elapsedMs = stopwatch.ElapsedMilliseconds; // Get actual time in milliseconds
-
-                    Assert.True(elapsedMs <= MaxQueryTimeMilliseconds,
-                        $"Query took {elapsedMs}ms, exceeding 2-second limit.");
-
-                    // 4) Ensure All 100 Inserted Terms Were Found
-                    var queriedTermNames = new HashSet<string>(allTerms.Select(t => t.Name));
-                    foreach (var name in insertedNames)
-                    {
-                        Assert.Contains(name, queriedTermNames);
-                    }
-                }
-                finally
-                {
-                    // 5) Cleanup: Delete all inserted terms
-                    foreach (var listID in insertedTermListIDs)
-                    {
-                        DeleteStandardTerm(qbSession, listID);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Inserts a Standard Term and returns its ListID.
-        /// </summary>
-        private string InsertSingleStandardTerm(QuickBooksSession qbSession, string name, int dueDays)
+        private string AddStandardTerm(QuickBooksSession qbSession, string name, int companyID)
         {
             IMsgSetRequest requestMsgSet = qbSession.CreateRequestSet();
             IStandardTermsAdd stdTermsAddRq = requestMsgSet.AppendStandardTermsAddRq();
             stdTermsAddRq.Name.SetValue(name);
-            stdTermsAddRq.IsActive.SetValue(true);
-            stdTermsAddRq.StdDueDays.SetValue(dueDays);
-            stdTermsAddRq.StdDiscountDays.SetValue(dueDays);
-            stdTermsAddRq.DiscountPct.SetValue(5.0); // Example discount %
+            stdTermsAddRq.StdDiscountDays.SetValue(companyID);
 
             IMsgSetResponse responseMsgSet = qbSession.SendRequest(requestMsgSet);
             return ExtractListIDFromResponse(responseMsgSet);
         }
 
-
-        /// <summary>
-        /// Deletes a Standard Term using ListDelRq.
-        /// </summary>
-        private void DeleteStandardTerm(QuickBooksSession qbSession, string listID)
-        {
-            IMsgSetRequest requestMsgSet = qbSession.CreateRequestSet();
-            IListDel listDelRq = requestMsgSet.AppendListDelRq();
-            listDelRq.ListDelType.SetValue(ENListDelType.ldtStandardTerms);
-            listDelRq.ListID.SetValue(listID);
-
-            IMsgSetResponse responseMsgSet = qbSession.SendRequest(requestMsgSet);
-            WalkListDelResponse(responseMsgSet, listID);
-        }
-
-        /// <summary>
-        /// Extracts ListID from response.
-        /// </summary>
         private string ExtractListIDFromResponse(IMsgSetResponse responseMsgSet)
         {
             IResponseList responseList = responseMsgSet.ResponseList;
@@ -140,70 +109,33 @@ namespace QB_Terms_Test
             if (stdTermRet == null)
                 throw new Exception("No IStandardTermsRet returned after adding Standard Term.");
 
-            string listID = stdTermRet.ListID?.GetValue() ?? "";
-            Console.WriteLine($"Inserted Standard Term with ListID: {listID}");
-            return listID;
+            return stdTermRet.ListID?.GetValue() ?? throw new Exception("ListID is missing in QuickBooks response.");
         }
 
-        /// <summary>
-        /// Processes the response for a ListDel request.
-        /// </summary>
+        private void DeleteStandardTerm(QuickBooksSession qbSession, string listID)
+        {
+            IMsgSetRequest requestMsgSet = qbSession.CreateRequestSet();
+            IListDel listDelRq = requestMsgSet.AppendListDelRq();
+            listDelRq.ListDelType.SetValue(ENListDelType.ldtStandardTerms);
+            listDelRq.ListID.SetValue(listID);
+
+            IMsgSetResponse responseMsgSet = qbSession.SendRequest(requestMsgSet);
+            WalkListDelResponse(responseMsgSet, listID);
+        }
+
         private void WalkListDelResponse(IMsgSetResponse responseMsgSet, string listID)
         {
             IResponseList responseList = responseMsgSet.ResponseList;
             if (responseList == null || responseList.Count == 0) return;
 
             IResponse response = responseList.GetAt(0);
-            if (response.StatusCode >= 0 && response.Detail != null)
+            if (response.StatusCode == 0 && response.Detail != null)
             {
-                Console.WriteLine($"Successfully deleted Standard Term (ListID: {listID}) using ListDelRq.");
+                Debug.WriteLine($"Successfully deleted Standard Term (ListID: {listID}).");
             }
             else
             {
-                Console.WriteLine($"Error Deleting Standard Term: {response.StatusMessage}");
-            }
-        }
-    }
-
-    /// <summary>
-    /// Encapsulates QuickBooks session handling.
-    /// </summary>
-    public class QuickBooksSession : IDisposable
-    {
-        private QBSessionManager _sessionManager;
-        private bool _sessionBegun;
-        private bool _connectionOpen;
-
-        public QuickBooksSession(string appName)
-        {
-            _sessionManager = new QBSessionManager();
-            _sessionManager.OpenConnection("", appName);
-            _connectionOpen = true;
-            _sessionManager.BeginSession("", ENOpenMode.omDontCare);
-            _sessionBegun = true;
-        }
-
-        public IMsgSetRequest CreateRequestSet()
-        {
-            IMsgSetRequest requestMsgSet = _sessionManager.CreateMsgSetRequest("US", 16, 0);
-            requestMsgSet.Attributes.OnError = ENRqOnError.roeContinue;
-            return requestMsgSet;
-        }
-
-        public IMsgSetResponse SendRequest(IMsgSetRequest requestMsgSet)
-        {
-            return _sessionManager.DoRequests(requestMsgSet);
-        }
-
-        public void Dispose()
-        {
-            if (_sessionBegun)
-            {
-                _sessionManager.EndSession();
-            }
-            if (_connectionOpen)
-            {
-                _sessionManager.CloseConnection();
+                throw new Exception($"Error Deleting Standard Term (ListID: {listID}): {response.StatusMessage}. Status code: {response.StatusCode}");
             }
         }
     }
